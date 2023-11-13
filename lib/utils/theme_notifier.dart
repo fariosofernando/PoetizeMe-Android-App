@@ -37,6 +37,7 @@ class ThemeNotifier extends ValueNotifier<String> {
   }
 
   void toggleTheme(String newTheme) {
+    debugPrint("CHANCHING THEME FOR: $newTheme");
     value = newTheme;
     _box.put('themeMode', newTheme);
   }

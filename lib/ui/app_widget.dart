@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../blocs/home/bloc.dart';
 import '../color_schemes.g.dart';
 import '../utils/theme_notifier.dart';
-import 'home/home.dart';
+import 'home/home_page.dart';
 
 class MyApp extends StatelessWidget {
   final HomeBloc bloc;

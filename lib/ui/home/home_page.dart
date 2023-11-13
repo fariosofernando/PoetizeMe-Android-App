@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:poetizeme/ui/poetry.dart';
+import 'package:poetizeme/ui/poetry_page.dart';
 import 'package:provider/provider.dart';
 
 import '../../blocs/home/bloc.dart';
@@ -36,8 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  bool isDarkMode = false;
-
   @override
   Widget build(BuildContext context) {
     ThemeNotifier themeNotifier = Provider.of<ThemeNotifier>(context, listen: true);
@@ -64,36 +62,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 actions: [
                   IconButton(
                     onPressed: () {
-                      setState(() {
-                        isDarkMode = !isDarkMode;
-                      });
-
-                      themeNotifier.toggleTheme(ThemeModeSetting.dark.name);
+                      if ((themeNotifier.currentThemeMode == ThemeMode.dark)) {
+                        themeNotifier.toggleTheme(ThemeModeSetting.light.name);
+                      } else {
+                        themeNotifier.toggleTheme(ThemeModeSetting.dark.name);
+                      }
                     },
-                    icon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isDarkMode = !isDarkMode;
-                        });
+                    icon: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 800),
+                      transitionBuilder: (child, animation) {
+                        return ScaleTransition(scale: animation, child: child);
                       },
-                      icon: AnimatedSwitcher(
-                        duration: const Duration(seconds: 1),
-                        transitionBuilder: (child, animation) {
-                          return ScaleTransition(scale: animation, child: child);
-                        },
-                        child: isDarkMode
-                            ? const Icon(
-                                Icons.brightness_2,
-                                key: ValueKey('moon'),
-                              )
-                            : const Icon(
-                                Icons.wb_sunny,
-                                key: ValueKey('sun'),
-                              ),
-                      ),
+                      child: !(themeNotifier.currentThemeMode == ThemeMode.dark)
+                          ? const Icon(
+                              Icons.brightness_2,
+                              key: ValueKey('moon'),
+                            )
+                          : const Icon(
+                              Icons.wb_sunny,
+                              key: ValueKey('sun'),
+                            ),
                     ),
                   ),
-                  IconButton(onPressed: () => themeNotifier.toggleTheme(ThemeModeSetting.dark.name), icon: const Icon(Icons.menu)),
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
                 ],
               ),
               body: ListView.separated(
