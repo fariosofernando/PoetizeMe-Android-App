@@ -115,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         leading: CircleAvatar(
                           child: Text(poetryList[index].author.username[0].toUpperCase()),
                         ),
-                        title: Text(poetryList[index].title.toLowerCase()),
+                        title: Text(poetryList[index].title),
                         subtitle: Text(
                           poetryList[index].content,
                           textAlign: TextAlign.justify,
@@ -146,6 +146,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   );
                 },
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {},
+                child: const Icon(Icons.edit),
               ),
             );
           }
