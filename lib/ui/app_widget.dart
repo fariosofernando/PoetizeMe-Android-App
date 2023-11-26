@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../blocs/home/bloc.dart';
 import '../color_schemes.g.dart';
+import '../splash.dart';
 import '../utils/theme_notifier.dart';
-import 'home/home_page.dart';
 
 class MyApp extends StatelessWidget {
   final HomeBloc bloc;
@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       themeMode: themeNotifier.currentThemeMode,
-      title: 'PoetizMe',
-      home: MyHomePage(bloc, title: 'PoetizeMe'),
+      title: 'PoetizeMe',
+      home: PresplashView(bloc: bloc),
     );
   }
 }

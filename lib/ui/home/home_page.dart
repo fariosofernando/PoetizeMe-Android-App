@@ -74,7 +74,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ),
-                title: Text(widget.title),
+                centerTitle: true,
+                title: Text(
+                  widget.title[0],
+                  style: const TextStyle(
+                    fontFamily: 'BirthstoneBounce',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 actions: [
                   IconButton(
                     onPressed: () {
