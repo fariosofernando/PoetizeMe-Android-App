@@ -7,6 +7,9 @@ import '../../blocs/home/events.dart';
 import '../../blocs/home/states.dart';
 import '../../utils/system_ui_overlay_style.dart';
 import '../../utils/theme_notifier.dart';
+import '../components/loading_page.dart';
+import '../components/status.dart';
+import '../write_poetry_page.dart';
 
 class MyHomePage extends StatefulWidget {
   final HomeBloc bloc;
@@ -46,18 +49,29 @@ class _MyHomePageState extends State<MyHomePage> {
           final poetryList = snapshot.data?.poetrys ?? [];
 
           if (snapshot.data is HomeLoadingState) {
-            return Scaffold(
-              appBar: AppBar(
-                systemOverlayStyle: systemUiOverlayStyle(context),
-              ),
-              body: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
+            return const LoadingPage();
           } else if (snapshot.data is HomeSucessState) {
             return Scaffold(
               appBar: AppBar(
                 systemOverlayStyle: systemUiOverlayStyle(context),
+                bottom: PreferredSize(
+                  preferredSize: Size(MediaQuery.sizeOf(context).width, 60),
+                  child: const SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Status(isUpdated: true),
+                        Status(isUpdated: true),
+                        Status(),
+                        Status(),
+                        Status(),
+                        Status(),
+                        Status(),
+                      ],
+                    ),
+                  ),
+                ),
                 title: Text(widget.title),
                 actions: [
                   IconButton(
@@ -87,81 +101,84 @@ class _MyHomePageState extends State<MyHomePage> {
                   IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
                 ],
               ),
-              body: ListView.separated(
-                controller: _scrollController,
-                key: listViewKey,
-                separatorBuilder: (_, __) => const Divider(),
-                itemCount: poetryList.length,
-                itemBuilder: (context, index) {
-                  List<Widget> tagsWidgets = [];
-                  for (var element in poetryList[index].tags) {
-                    tagsWidgets.add(Card(
-                      shadowColor: Colors.transparent,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(element.name),
-                      ),
-                    ));
-                  }
+              body: Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: ListView.separated(
+                  controller: _scrollController,
+                  key: listViewKey,
+                  separatorBuilder: (_, __) => const Divider(),
+                  itemCount: poetryList.length,
+                  itemBuilder: (context, index) {
+                    List<Widget> tagsWidgets = [];
+                    for (var element in poetryList[index].tags) {
+                      tagsWidgets.add(Card(
+                        shadowColor: Colors.transparent,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(element.name),
+                        ),
+                      ));
+                    }
 
-                  return Column(
-                    children: [
-                      ListTile(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) {
-                            return PoetryPage(poetryList[index]);
-                          }));
-                        },
-                        leading: CircleAvatar(
-                          child: Text(poetryList[index].author.username[0].toUpperCase()),
+                    return Column(
+                      children: [
+                        ListTile(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) {
+                              return PoetryPage(poetryList[index]);
+                            }));
+                          },
+                          leading: CircleAvatar(
+                            child: Text(poetryList[index].author.username[0].toUpperCase()),
+                          ),
+                          title: Text(poetryList[index].title),
+                          subtitle: Text(
+                            poetryList[index].content,
+                            textAlign: TextAlign.justify,
+                          ),
+                          isThreeLine: true,
                         ),
-                        title: Text(poetryList[index].title),
-                        subtitle: Text(
-                          poetryList[index].content,
-                          textAlign: TextAlign.justify,
+                        Padding(
+                          padding: const EdgeInsets.only(right: 25.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                "${poetryList[index].likes.length} gostos",
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                              Row(children: tagsWidgets),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.favorite_border),
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.copy),
+                              ),
+                            ],
+                          ),
                         ),
-                        isThreeLine: true,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 25.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              "${poetryList[index].likes.length} gostos",
-                              style: const TextStyle(color: Colors.grey),
-                            ),
-                            Row(children: tagsWidgets),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.favorite_border),
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.copy),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                      ],
+                    );
+                  },
+                ),
               ),
               floatingActionButton: FloatingActionButton(
-                onPressed: () {},
-                child: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return const WritePoetryPage();
+                    }),
+                  );
+                },
+                child: const Icon(Icons.history_edu_rounded),
               ),
             );
           }
 
-          return Scaffold(
-            appBar: AppBar(
-              systemOverlayStyle: systemUiOverlayStyle(context),
-            ),
-            body: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+          return const LoadingPage();
         });
   }
 }
