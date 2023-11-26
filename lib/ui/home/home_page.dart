@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:poetizeme/ui/poetry_page.dart';
+import 'package:poetizeme/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../blocs/home/bloc.dart';
@@ -9,6 +10,7 @@ import '../../utils/system_ui_overlay_style.dart';
 import '../../utils/theme_notifier.dart';
 import '../components/loading_page.dart';
 import '../components/status.dart';
+import '../my_page.dart';
 import '../write_poetry_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -98,10 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: CircleAvatar(),
-                  ),
+                  _buildPopupMenuButton(),
                   const SizedBox(width: 10),
                 ],
               ),
@@ -184,5 +183,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
           return const LoadingPage();
         });
+  }
+
+  Widget _buildPopupMenuButton() {
+    return PopupMenuButton<String>(
+      itemBuilder: (BuildContext context) {
+        return const [
+          PopupMenuItem<String>(
+            value: 'profile',
+            child: Text('Eu'),
+          ),
+          PopupMenuItem<String>(
+            value: 'settings',
+            child: Text('Configurações'),
+          ),
+        ];
+      },
+      onSelected: (String value) {
+        if (value == 'profile') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return const Profile();
+          }));
+        } else if (value == 'settings') {}
+      },
+      offset: const Offset(0, 50),
+      child: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        backgroundImage: AssetImage(AvatarAssets.golen.asset),
+      ),
+    );
   }
 }
