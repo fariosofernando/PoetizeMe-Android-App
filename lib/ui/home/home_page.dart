@@ -98,7 +98,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                     ),
                   ),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+                  InkWell(
+                    onTap: () {},
+                    child: CircleAvatar(),
+                  ),
+                  const SizedBox(width: 10),
                 ],
               ),
               body: Padding(
